@@ -1,5 +1,7 @@
 package edu.javacourse.contact.entity;
 
+import java.io.Serializable;
+
 /**
  * Project: CM2
  * User: vars
@@ -7,7 +9,7 @@ package edu.javacourse.contact.entity;
  * Time: 20:41
  * Created with IntelliJ IDEA.
  */
-public class Contact {
+public class Contact implements Serializable {
     private Long contactID;
     private String surname;
     private String givenName;

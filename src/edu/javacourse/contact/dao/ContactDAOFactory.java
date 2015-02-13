@@ -25,16 +25,24 @@ public class ContactDAOFactory {
 
     public static ContactDAO getDAO() throws DAOException {
         String daoType = confProps.getString("contact.dao.type");
-        if (daoType.equals("csv")) {
-            try {
+        try {
+            if (daoType.equals("csv")) {
+
                 PropertyResourceBundle daoProps = (PropertyResourceBundle) PropertyResourceBundle.getBundle("conf/ContactDAOFileCSV");
                 Class classDefinition = Class.forName(daoProps.getString("contact.dao.class"));
                 return (ContactDAO) classDefinition.newInstance();
-
-            } catch (Exception e) {
-                e.printStackTrace(System.err);
             }
+            if (daoType.equals("serialize")) {
+                PropertyResourceBundle daoProps = (PropertyResourceBundle) PropertyResourceBundle.getBundle("conf/ContactDAOFileSerialize");
+                Class classDefinition = Class.forName(daoProps.getString("contact.dao.class"));
+                return (ContactDAO) classDefinition.newInstance();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
         }
         throw new DAOException("Can't return DAO, fatal.");
     }
+
 }
+
