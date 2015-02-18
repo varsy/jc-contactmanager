@@ -37,6 +37,11 @@ public class ContactDAOFactory {
                 Class classDefinition = Class.forName(daoProps.getString("contact.dao.class"));
                 return (ContactDAO) classDefinition.newInstance();
             }
+            if (daoType.equals("postgres")) {
+                PropertyResourceBundle daoProps = (PropertyResourceBundle) PropertyResourceBundle.getBundle("conf/ContactDAODb");
+                Class classDefinition = Class.forName(daoProps.getString("contact.dao.class"));
+                return (ContactDAO) classDefinition.newInstance();
+            }
 
         } catch (Exception e) {
             e.printStackTrace(System.err);
