@@ -3,9 +3,8 @@ package edu.javacourse.contact.dao;
 import edu.javacourse.contact.entity.Contact;
 import edu.javacourse.contact.filter.ContactFilter;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.PropertyResourceBundle;
 
@@ -22,6 +21,8 @@ public class ContactDAODb implements ContactDAO {
     private static String jdbcUrl;
     private static String jdbcUsername;
     private static String jdbcPassword;
+    private boolean isChanged = true;
+    private List<Contact> currentContactList = new ArrayList<Contact>();
 
     static {
         try {
@@ -70,11 +71,41 @@ public class ContactDAODb implements ContactDAO {
 
     @Override
     public List<Contact> listContacts() {
-        return null;
+        getContactsFromDb();
+        int i = 0;
+        for (Contact c : currentContactList) {
+            System.out.println("Contact: " + ++i + c);
+        }
+        return currentContactList;
     }
 
     @Override
     public List<Contact> findContact(ContactFilter filter) {
         return null;
     }
+
+    private void getContactsFromDb() {
+        try {
+            Connection con = getConnection();
+            try {
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM contacts");
+                currentContactList.clear();
+                while (rs.next()) {
+                    Contact c = new Contact();
+                    c.setContactID(rs.getLong("contact_id"));
+                    c.setSurname(rs.getString("surname"));
+                    c.setGivenName(rs.getString("givenname"));
+                    c.setEmail(rs.getString("email"));
+                    c.setPhone(rs.getString("phone"));
+                    currentContactList.add(c);
+                }
+            } finally {
+                con.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
+
