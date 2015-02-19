@@ -67,6 +67,7 @@ public class ContactDAODb implements ContactDAO {
     @Override
     public void editContact(Long id, Contact contact) {
 
+
     }
 
     @Override
@@ -89,13 +90,13 @@ public class ContactDAODb implements ContactDAO {
             Connection con = getConnection();
             try {
                 Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM contacts");
+                ResultSet rs = stmt.executeQuery("SELECT * FROM cm_contact");
                 currentContactList.clear();
                 while (rs.next()) {
                     Contact c = new Contact();
                     c.setContactID(rs.getLong("contact_id"));
-                    c.setSurname(rs.getString("surname"));
-                    c.setGivenName(rs.getString("givenname"));
+                    c.setSurname(rs.getString("sur_name"));
+                    c.setGivenName(rs.getString("given_name"));
                     c.setEmail(rs.getString("email"));
                     c.setPhone(rs.getString("phone"));
                     currentContactList.add(c);
